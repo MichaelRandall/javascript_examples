@@ -2,21 +2,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Untitled Document</title>
+<title>Generic Inline JavaScript Click Event</title>
 </head>
 <body>
+<!--Inline JS show/hide function that can be added to any html element-->
+<!--The function primarily operates the next elements sibling -->
 
     <div>
         <h1 onclick="(function()
         {
-        if(this.nextElementSibling.style.display !== 'none'){
-        this.nextElementSibling.style.display = 'none';
-        this.innerHTML = '&nbsp;+ Click';
-        }else{
-        this.nextElementSibling.style.display = 'block';
-        this.innerHTML = '&nbsp;- Click';
-        }
-        }).call(this);">&nbsp;+ Click</h1>
+          var next = this.nextElementSibling,
+          img = this.querySelector('img');
+          if(next.style.display !== 'none'){
+            next.style.display = 'none';
+            img.setAttribute('src','r_arrow.png');
+          }else{
+            next.style.display = 'block';
+            img.setAttribute('src','d_arrow.png');
+          }
+        }).call(this);">&nbsp;<img src="r_arrow.png" />Click</h1>
+        
         <div style="display:none; border:solid 1px red;">
         Some hidden content
         </div>
