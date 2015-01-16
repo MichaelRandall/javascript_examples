@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		#formHolder{
+			width: 200px;
+			height:100px;
+			background-color: #ccc;
+		}
+
+		#indicator{
+			width:25px;
+			height: 25px;
+			background-color: red;
+			border:solid 4px black;
+		}
+	</style>
+	<script type="text/javascript">
+	    var _0g = {};
+	    
+	    _0g.INDICATOR = function(){
+	    	console.log("indicator fired");
+	    	var indctrCount = 0;
+	    	var indctr = document.getElementById("indicator");
+	    	indctr.innerHTML = indctrCount;
+
+	    	function addOne(){
+	    		console.log("add one");
+	    		//indctrCount += 1;
+	    		//indctr.innerHTML = indctrCount;
+	    	}
+	    	return{
+	    		addOne:addOne
+	    	};
+	    	
+	    }();
+	    
+	    _0g.CLOCK = function(){
+	    	console.log("fired");
+	    	var timeRemaining = 0;
+	    	var startBttn = document.getElementById('inputBtn');
+	    	var inputTxt = document.getElementById('inputTxt');
+	    	var outputTxt = document.getElementById('remain');
+	    	var theForm = document.getElementById('getCount');
+	    	//console.log(inputTxt.getAttribute('id'));
+
+	    	function tick(){
+				if(timeRemaining > 0){
+					outputTxt.innerHTML = timeRemaining - 1;
+					timeRemaining -= 1;
+					console.log("tick");
+					_0g.INDICATOR.addOne();
+
+				}else{
+					clearInterval(ntime);
+				}
+			}
+
+			function startTimer(){
+				//ntime is automatically made global here so it can be accessed
+				//in the tick function
+				console.log("timer started");
+				outputTxt.innerHTML = inputTxt.value;
+				timeRemaining = inputTxt.value;
+				theForm.reset();
+				ntime = setInterval(tick, 1000);
+				_0g.INDICATOR();
+			}
+
+			startBttn.addEventListener("click", startTimer);
+
+	    }//(); //IIFE - Immediately Invoked Function Expression
+				
+	    window.onload = function(){
+			console.log("window Loaded");
+			_0g.CLOCK();
+			_0g.INDICATOR();
+		}
+		
+		
+	</script>
+	<style type="text/css"></style>
+</head>
+<body>
+	<div id="formHolder">
+	<form id="getCount">
+		<input name="inputTxt" id="inputTxt" type="number" placeholder="enter time in seconds" /><br />	
+	</form>
+	<button id="inputBtn">Submit</button>
+	</div>
+	<div>
+	<p id="remain">0</p>
+	</div>
+
+	<div id="indicator">
+	</div>
+</body>
+</html>
