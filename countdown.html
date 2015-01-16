@@ -18,25 +18,39 @@
 	<script type="text/javascript">
 	    var _0g = {};
 	    
-	    _0g.INDICATOR = function(){
-	    	console.log("indicator fired");
-	    	var indctrCount = 0;
-	    	var indctr = document.getElementById("indicator");
-	    	indctr.innerHTML = indctrCount;
+			
+		_0g.INDICATOR = function(){
+			var startBttn = document.getElementById('inputBtn');
+	    	var inputTxt = document.getElementById('inputTxt');
+	    	var outputTxt = document.getElementById('remain');
+	    	var theForm = document.getElementById('getCount');
+			var theIndctr = document.getElementById('indicator');
 
 	    	function addOne(){
-	    		console.log("add one");
-	    		//indctrCount += 1;
-	    		//indctr.innerHTML = indctrCount;
+				console.log(THECOUNT+=1);
+				var theIndctr = document.getElementById("indicator");
+				document.getElementById("indicator").innerHTML = THECOUNT;
 	    	}
-	    	return{
-	    		addOne:addOne
-	    	};
+	    	//return{
+//	    		addOne:addOne
+//	    	};
+			
+			function updateColor(){
+				document.getElementById("indicator").style.backgroundColor ="green";
+			}
+			
+			return{
+				addOne:addOne,
+				updateColor:updateColor
+			};
+			
 	    	
 	    }();
-	    
+	    	
+		
 	    _0g.CLOCK = function(){
-	    	console.log("fired");
+	    	console.log("Clock fired");
+			
 	    	var timeRemaining = 0;
 	    	var startBttn = document.getElementById('inputBtn');
 	    	var inputTxt = document.getElementById('inputTxt');
@@ -49,10 +63,10 @@
 					outputTxt.innerHTML = timeRemaining - 1;
 					timeRemaining -= 1;
 					console.log("tick");
-					_0g.INDICATOR.addOne();
-
+					_0g.INDICATOR.addOne();	
 				}else{
 					clearInterval(ntime);
+					_0g.INDICATOR.updateColor();
 				}
 			}
 
@@ -61,21 +75,25 @@
 				//in the tick function
 				console.log("timer started");
 				outputTxt.innerHTML = inputTxt.value;
+				//make timeRemaining global so all have access to it.
 				timeRemaining = inputTxt.value;
 				theForm.reset();
 				ntime = setInterval(tick, 1000);
-				_0g.INDICATOR();
+				//document.getElementById("indicator").innerHTML = 10;
 			}
 
 			startBttn.addEventListener("click", startTimer);
 
 	    }//(); //IIFE - Immediately Invoked Function Expression
+		
+		
 				
-	    window.onload = function(){
-			console.log("window Loaded");
-			_0g.CLOCK();
-			_0g.INDICATOR();
-		}
+	    window.addEventListener("load", function(){
+			console.log("window is loaded");
+			THECOUNT = 10;
+			document.getElementById("indicator").innerHTML = THECOUNT;
+			_0g.CLOCK();	
+		});
 		
 		
 	</script>
@@ -92,7 +110,8 @@
 	<p id="remain">0</p>
 	</div>
 
-	<div id="indicator">
+	<div>
+    <p  id="indicator"></p>
 	</div>
 </body>
 </html>
