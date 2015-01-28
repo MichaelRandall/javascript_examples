@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Transendentalism</title>
+<style>
+
+#container {
+	min-width:300px;
+	max-width:350px;
+	min-height:100px;
+    background-color:#C30;
+	border:solid 4px black;
+}
+
+#console{
+	min-width:400px;
+	min-height:30px;
+	display:inline-block;
+	border:solid 2px black;
+	padding:2px;
+	box-sizing:content-box;
+}
+
+#gameBoard{
+	width:100px;
+	min-height:100px;
+	border:solid 2px #3399FF;
+	box-sizing:content-box;
+}
+
+.gamePanel{
+	width:10px;
+	height:10px;
+	border:solid 1px green;
+	display:inline-block;
+	box-sizing:content-box;
+}
+
+
+.bttn{
+	width:100px;
+	height:15px;
+	border:solid 2px #ccc;
+	display:inline-block;
+	margin: 1px 0;
+	text-align:center;
+}
+</style>
+
+<script>
+//game objects
+//game state move1, moveNoMatch, moveMatch
+
+var gameState = {
+	moves : [],
+	
+	addMove: function(move){
+		this.moves.push(move);
+	},
+	
+	getGameState : function(){
+		for(var i=0; i<this.moves.length;i++){
+			console.log(this.moves[i]);
+		}
+	}
+}
+
+
+
+var gameMove = new function(id,ts,pi,cat){
+	this.id = id;
+	this.timestamp = ts;
+	this.panelIcon = pi;
+	this.category = cat;
+}
+
+//global game area variables
+var gameStats = [];
+var gameTime = 0;
+var moveCount = 0;
+
+
+//individual move area variables
+var moveTime = 0;
+var move = 1;
+var mvData = [];
+var mvStart = "";
+var mvEnd = "";
+
+var container = document.getElementById("container");
+
+//records the game clock for game duration, will need to modify to show seconds, minutes, hours, etc...
+function gmClock(){
+	gameTime += 1;
+	console.log(gameTime);
+}
+
+//records duration of a move (first and second click), not being used yet.
+function mvClock(){
+	moveTime += 1;
+	console.log(moveTime);
+}
+
+
+
+
+//to build attributes for panels
+var animals = [
+"elephant", "elephant",
+"cat", "cat",
+"dog", "dog",
+"monkey", "monkey",
+"horse", "horse",
+"rabbit", "rabbit",
+"racoon", "racoon",
+"goat", "goat"];
+
+//builds the game panels, called from loadGrid function
+function buildPanels(gridSize){
+	theBoard = document.getElementById("gameBoard");
+	var newGridSize = gridSize * gridSize;
+	console.log("The grid dimensions are: " + gridSize + " by " + gridSize + ", which equals " + newGridSize);
+	var panelSize = ((100 / gridSize) - 2) + "px";
+	console.log("height and width of the panel is: " + panelSize); 
+	
+	for (var i = 0; i < newGridSize; i++){
+		
+		console.log("The new grid size is: " + newGridSize + ". The panel size is: " + panelSize);
+		gamePanelElement = document.createElement("div");
+		gamePanelElement.setAttribute("id", "p_" + i);
+		gamePanelElement.setAttribute("state", "unflipped");
+		gamePanelElement.setAttribute("icon",animals[Math.floor((Math.random() * 16))]);
+		gamePanelElement.classList.add("gamePanel");
+		gamePanelElement.style.width = panelSize;
+		gamePanelElement.style.height = panelSize;
+		
+		gamePanelElement.addEventListener("click",function(e){
+			//uncomment for testing in console
+			//var theType = typeof this;
+			//console.log(theType + ", " + this.getAttribute("id"));
+			
+			var panelID = this.getAttribute('id');
+			var panelState = this.setAttribute('state','flipped');
+			panelState = this.getAttribute('state');
+			var panelIcon = this.getAttribute('icon');
+			var theTime = new Date();
+			var moveTime = theTime.getTime();
+			
+			var theMove = {id:panelID, state:panelState, icon:panelIcon, mvTime:moveTime};
+			gameState.addMove(theMove);
+			console.log(gameState.moves);
+		});
+		
+		theBoard.appendChild(gamePanelElement);
+	}
+}
+
+//builds the game board when user clicks start
+function loadGrid(){
+	console.log("loadGrid function called");
+	var gameBoard = document.createElement("div");
+	gameBoard.setAttribute("id","gameBoard");
+	container = document.getElementById("container");
+	container.appendChild(gameBoard);
+	buildPanels(4);
+}
+
+
+function init(){
+	var strtBttn = document.getElementById("startBttn");
+	strtBttn.addEventListener('click', function(){
+		loadGrid();
+		//Commented out for testing. Uncomment for full game
+		//ntime = setInterval(gmClock, 1000);
+	});
+	var pauseBttn = document.getElementById("pauseBttn");
+	pauseBttn.addEventListener("click", function(){
+		clearInterval(ntime);
+	});
+	
+	var resumeBttn = document.getElementById("resumeBttn");
+	resumeBttn.addEventListener('click', function(){
+		ntime = setInterval(gmClock, 1000);
+	});
+}
+
+window.addEventListener('load', function(){
+	init();
+});
+
+</script>
+</head>
+
+<body>
+	<div id="container">	
+    </div><br />
+    <div id="console">
+    	<div id="startBttn" class="bttn">Start Game</div>
+    	<div id="pauseBttn" class="bttn">Pause Game</div>
+    	<div id="resumeBttn" class="bttn">Resume Game</div>
+    </div>
+</body>
+</html>
