@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Game State Object Test</title>
+
+<script>
+var gameMoveState = "";
+
+var gameState = {
+	moves : [],
+	
+	addMove: function(move){
+		this.moves.push(move);
+	},
+	
+	getGameState : function(){
+		console.log("get game state");
+		//for(var i=0; i<this.moves.length;i++){
+		//	console.log(this.moves[i]);
+		//}
+	},
+	
+	getLastElement : function(){
+		return this.moves[this.moves.length - 1];
+	},
+	
+	checkMoveState : function(){
+		if(this.moves.length % 2 !== 0){
+			//gameMoveState = "incomplete";
+		}
+	},
+	
+	checkCategoryMatch : function(){
+		for(var i = 0; i < this.moves.length; i++){
+			for(var j=1; j < this.moves.length; j++){
+				if(this.moves[i].icon === this.moves[j].icon){
+					console.log(this.moves[i].icon + " is equal to " + this.moves[j].icon);
+					return;
+				}else{
+					console.log(this.moves[i].icon + " is not equal to " + this.moves[j].icon);
+				}
+			}
+			
+		}
+	},
+	
+	getMoveTimeDiff : function(){
+		console.log(this.moves[3].mvTime - this.moves[1].mvTime);
+	},
+}
+
+function init(){
+	gameState.addMove({id:1,state:"flipped",icon:"cat",mvTime:Date.now()});
+	gameState.addMove({id:2,state:"flipped",icon:"dog",mvTime:Date.now()+10});
+	gameState.addMove({id:3,state:"flipped",icon:"horse",mvTime:Date.now()+20});
+	gameState.addMove({id:4,state:"flipped",icon:"dog",mvTime:Date.now()+30});	
+};
+//var theMove = {id:panelID, state:panelState, icon:panelIcon, mvTime:moveTime};
+//gameState.addMove(theMove);
+window.addEventListener('load', function(){
+	init();
+});
+</script>
+</head>
+
+<body>
+</body>
+</html>
