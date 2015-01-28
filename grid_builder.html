@@ -60,20 +60,42 @@ var gameState = {
 	},
 	
 	getGameState : function(){
-		for(var i=0; i<this.moves.length;i++){
-			console.log(this.moves[i]);
+		console.log("get game state");
+		//for(var i=0; i<this.moves.length;i++){
+		//	console.log(this.moves[i]);
+		//}
+	},
+
+	getLastElement : function(){
+		return this.moves[this.moves.length - 1];
+	},
+
+	checkMoveState : function(){
+		if(this.moves.length % 2 !== 0){
+			//gameMoveState = "incomplete";
 		}
+	},
+
+	checkCategoryMatch : function(){
+		for(var i = 0; i < this.moves.length; i++){
+			for(var j=1; j < this.moves.length; j++){
+				if(this.moves[i].icon === this.moves[j].icon){
+					console.log(this.moves[i].icon + " is equal to " + this.moves[j].icon);
+					return;
+				}else{
+					console.log(this.moves[i].icon + " is not equal to " + this.moves[j].icon);
+				}
+			}
+
+		}
+	},
+
+	getMoveTimeDiff : function(){
+		console.log(this.moves[3].mvTime - this.moves[1].mvTime);
 	}
 }
 
 
-
-var gameMove = new function(id,ts,pi,cat){
-	this.id = id;
-	this.timestamp = ts;
-	this.panelIcon = pi;
-	this.category = cat;
-}
 
 //global game area variables
 var gameStats = [];
@@ -96,41 +118,20 @@ function gmClock(){
 	console.log(gameTime);
 }
 
-//records duration of a move (first and second click), not being used yet.
-function mvClock(){
-	moveTime += 1;
-	console.log(moveTime);
-}
 
 
-
-
-//to build attributes for panels
-var animals = [
-"elephant", "elephant",
-"cat", "cat",
-"dog", "dog",
-"monkey", "monkey",
-"horse", "horse",
-"rabbit", "rabbit",
-"racoon", "racoon",
-"goat", "goat"];
 
 //builds the game panels, called from loadGrid function
 function buildPanels(gridSize){
 	theBoard = document.getElementById("gameBoard");
 	var newGridSize = gridSize * gridSize;
-	console.log("The grid dimensions are: " + gridSize + " by " + gridSize + ", which equals " + newGridSize);
 	var panelSize = ((100 / gridSize) - 2) + "px";
-	console.log("height and width of the panel is: " + panelSize); 
 	
 	for (var i = 0; i < newGridSize; i++){
-		
-		console.log("The new grid size is: " + newGridSize + ". The panel size is: " + panelSize);
 		gamePanelElement = document.createElement("div");
 		gamePanelElement.setAttribute("id", "p_" + i);
 		gamePanelElement.setAttribute("state", "unflipped");
-		gamePanelElement.setAttribute("icon",animals[Math.floor((Math.random() * 16))]);
+		gamePanelElement.setAttribute("icon","cat");
 		gamePanelElement.classList.add("gamePanel");
 		gamePanelElement.style.width = panelSize;
 		gamePanelElement.style.height = panelSize;
@@ -147,9 +148,8 @@ function buildPanels(gridSize){
 			var theTime = new Date();
 			var moveTime = theTime.getTime();
 			
-			var theMove = {id:panelID, state:panelState, icon:panelIcon, mvTime:moveTime};
+			var theMove = {id:panelID, icon:panelIcon, mvTime:moveTime};
 			gameState.addMove(theMove);
-			console.log(gameState.moves);
 		});
 		
 		theBoard.appendChild(gamePanelElement);
@@ -163,6 +163,7 @@ function loadGrid(){
 	gameBoard.setAttribute("id","gameBoard");
 	container = document.getElementById("container");
 	container.appendChild(gameBoard);
+    //specify a dimension for the grid
 	buildPanels(4);
 }
 
