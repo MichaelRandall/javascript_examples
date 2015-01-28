@@ -52,6 +52,8 @@
 //game objects
 //game state move1, moveNoMatch, moveMatch
 
+var moveState = 0;
+
 var gameState = {
 	moves : [],
 	
@@ -60,10 +62,7 @@ var gameState = {
 	},
 	
 	getGameState : function(){
-		console.log("get game state");
-		//for(var i=0; i<this.moves.length;i++){
-		//	console.log(this.moves[i]);
-		//}
+		console.log("get some game state");
 	},
 
 	getLastElement : function(){
@@ -118,7 +117,28 @@ function gmClock(){
 	console.log(gameTime);
 }
 
+function resetPanels(_1stp,_2ndp){
+    //console.log(_1stp + ", " + _2ndp);
+    var allPanels = document.getElementsByClassName('gamePanel');
+    for(var i = 0; i < allPanels.length; i++){
+        if(allPanels[i].id === _1stp || allPanels[i].id === _2ndp){
+            allPanels[i].state = "unflipped";
+            console.log(allPanels[i]);
+            console.log(allPanels[i].id + ", " + allPanels[i].state + ", " + allPanels[i].icon);
+        }
+    }
+}
 
+
+var animals = [
+"elephant",
+"cat",
+"dog",
+"monkey",
+"horse",
+"rabbit",
+"raccoon",
+"goat"];
 
 
 //builds the game panels, called from loadGrid function
@@ -130,8 +150,10 @@ function buildPanels(gridSize){
 	for (var i = 0; i < newGridSize; i++){
 		gamePanelElement = document.createElement("div");
 		gamePanelElement.setAttribute("id", "p_" + i);
+        //gamePanelElement.setAttribute("class", "panel");
 		gamePanelElement.setAttribute("state", "unflipped");
-		gamePanelElement.setAttribute("icon","cat");
+        var theAnimal = Math.floor(Math.random()*4);
+		gamePanelElement.setAttribute("icon", animals[theAnimal]);
 		gamePanelElement.classList.add("gamePanel");
 		gamePanelElement.style.width = panelSize;
 		gamePanelElement.style.height = panelSize;
@@ -147,9 +169,41 @@ function buildPanels(gridSize){
 			var panelIcon = this.getAttribute('icon');
 			var theTime = new Date();
 			var moveTime = theTime.getTime();
-			
-			var theMove = {id:panelID, icon:panelIcon, mvTime:moveTime};
+
+            var theMove = {id:panelID, icon:panelIcon, mvTime:moveTime};
+            console.log(theMove);
 			gameState.addMove(theMove);
+
+            if(moveState === 0){
+                var lastObjNum = gameState.moves.length - 1;
+                var lastObj = gameState.moves[lastObjNum];
+                //console.log(lastObj);
+                //console.log(lastObj.icon);
+                lastObj.mvState = "incomplete";
+                //console.log(lastObj.state);
+                //console.log(lastObj);
+                moveState = 1;
+            } else{
+                var lastObjNum = gameState.moves.length - 1;
+                var prevObjNum = gameState.moves.length - 2;
+
+                var lastObj = gameState.moves[lastObjNum];
+                var prevObj = gameState.moves[prevObjNum];
+
+                var lastObjIcon = lastObj.icon;
+                var prevObjIcon = prevObj.icon;
+
+                if(lastObjIcon === prevObjIcon){
+                    lastObj.mvState = "match";
+                    //console.log("match");
+                }else{
+                    lastObj.mvState = "no_match";
+                    //console.log("no match");
+                    //need to create reset panels function
+                    resetPanels(lastObj.id,prevObj.id);
+                }
+                moveState = 0;
+            }
 		});
 		
 		theBoard.appendChild(gamePanelElement);
