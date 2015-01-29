@@ -35,6 +35,27 @@
 	border:solid 1px green;
 	display:inline-block;
 	box-sizing:content-box;
+    transition:transform 2s;
+}
+
+/*test what these do and if they are needed*/
+.gamePanel div:not(.clear){
+	-webkit-transition:all 2s ease-in-out;
+	-moz-transition:all 2s ease-in-out;
+	-ms-transition:all 2s ease-in-out;
+	-transition:all 2s ease-in-out;
+
+	-webkit-perspective:800px;
+	-webkit-perspective-origin: 50% 100px;
+
+	-moz-perspective:800px;
+	-moz-perspective-origin: 50% 100px;
+
+	-ms-perspective:800px;
+	-ms-perspective-origin: 50% 100px;
+
+	perspective:800px;
+	perspective-origin: 50% 100px;
 }
 
 
@@ -146,6 +167,9 @@ function buildPanels(gridSize){
 			//uncomment for testing in console
 			//var theType = typeof this;
 			//console.log(theType + ", " + this.getAttribute("id"));
+
+            //rotates each individual div on the Y axis
+            this.style.transform="rotateY(180deg)";
 			
 			var panelID = this.getAttribute('id');
 			var panelState = this.setAttribute('state','flipped');
