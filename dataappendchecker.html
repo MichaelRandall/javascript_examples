@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+<script>
+
+var animals = ['horse','giraffe','cow','donkey','rabbit','pigeon','goat','elephant','pig','marmot','raccoon'];
+
+var usedList = [];
+
+function loadData(){
+	console.log(animals.length);
+	for(var i = 0; i < 6; i++){
+		var getNum = Math.floor(Math.random() * 10);
+		var curAnimal = animals[getNum];
+		console.log(curAnimal + " is the " + getNum + ' animal in the animals array');
+		
+		/*
+		if(usedList.length >= 1){
+			for(var i = 0; i < usedList.length; i++){
+				if(usedList[i].name === curAnimal && usedList[i].count < 2){
+					usedList[i].count = 2;
+					console.log(usedList[i].count);
+				}
+			}
+		}else{
+			var newObj = {"name":curAnimal,"count":1};
+			usedList.push(newObj);
+			console.log(usedList);
+		}
+		*/
+		
+	}
+}
+
+
+function init(){
+	loadData();
+}
+
+window.addEventListener('load',function(){
+	init();
+});
+</script>
+</head>
+
+<body>
+<p>Hi</p>
+</body>
+</html>
