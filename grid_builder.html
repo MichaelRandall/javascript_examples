@@ -35,6 +35,27 @@
 	border:solid 1px green;
 	display:inline-block;
 	box-sizing:content-box;
+    transition:transform 2s;
+}
+
+/*test what these do and if they are needed*/
+.gamePanel div:not(.clear){
+	-webkit-transition:all 2s ease-in-out;
+	-moz-transition:all 2s ease-in-out;
+	-ms-transition:all 2s ease-in-out;
+	-transition:all 2s ease-in-out;
+
+	-webkit-perspective:800px;
+	-webkit-perspective-origin: 50% 100px;
+
+	-moz-perspective:800px;
+	-moz-perspective-origin: 50% 100px;
+
+	-ms-perspective:800px;
+	-ms-perspective-origin: 50% 100px;
+
+	perspective:800px;
+	perspective-origin: 50% 100px;
 }
 
 
@@ -52,6 +73,8 @@
 //game objects
 //game state move1, moveNoMatch, moveMatch
 
+var moveState = 0;
+
 var gameState = {
 	moves : [],
 	
@@ -60,20 +83,25 @@ var gameState = {
 	},
 	
 	getGameState : function(){
-		for(var i=0; i<this.moves.length;i++){
-			console.log(this.moves[i]);
+		console.log("get some game state");
+	},
+
+	getLastElement : function(){
+		return this.moves[this.moves.length - 1];
+	},
+
+	checkMoveState : function(){
+		if(this.moves.length % 2 !== 0){
+			//gameMoveState = "incomplete";
 		}
+	},
+
+	getMoveTimeDiff : function(){
+		console.log(this.moves[3].mvTime - this.moves[1].mvTime);
 	}
 }
 
 
-
-var gameMove = new function(id,ts,pi,cat){
-	this.id = id;
-	this.timestamp = ts;
-	this.panelIcon = pi;
-	this.category = cat;
-}
 
 //global game area variables
 var gameStats = [];
@@ -96,41 +124,41 @@ function gmClock(){
 	console.log(gameTime);
 }
 
-//records duration of a move (first and second click), not being used yet.
-function mvClock(){
-	moveTime += 1;
-	console.log(moveTime);
+function resetPanels(_1stp,_2ndp){
+    var allPanels = document.getElementsByClassName('gamePanel');
+    for(var i = 0; i < allPanels.length; i++){
+        if(allPanels[i].id === _1stp || allPanels[i].id === _2ndp){
+            allPanels[i].state = "unflipped";
+            console.log(allPanels[i]);
+            console.log(allPanels[i].id + ", " + allPanels[i].state + ", " + allPanels[i].icon);
+        }
+    }
 }
 
-
-
-
-//to build attributes for panels
+//can remove later, this is for testing
 var animals = [
-"elephant", "elephant",
-"cat", "cat",
-"dog", "dog",
-"monkey", "monkey",
-"horse", "horse",
-"rabbit", "rabbit",
-"racoon", "racoon",
-"goat", "goat"];
+"elephant",
+"cat",
+"dog",
+"monkey",
+"horse",
+"rabbit",
+"raccoon",
+"goat"];
+
 
 //builds the game panels, called from loadGrid function
 function buildPanels(gridSize){
 	theBoard = document.getElementById("gameBoard");
 	var newGridSize = gridSize * gridSize;
-	console.log("The grid dimensions are: " + gridSize + " by " + gridSize + ", which equals " + newGridSize);
 	var panelSize = ((100 / gridSize) - 2) + "px";
-	console.log("height and width of the panel is: " + panelSize); 
 	
 	for (var i = 0; i < newGridSize; i++){
-		
-		console.log("The new grid size is: " + newGridSize + ". The panel size is: " + panelSize);
 		gamePanelElement = document.createElement("div");
 		gamePanelElement.setAttribute("id", "p_" + i);
 		gamePanelElement.setAttribute("state", "unflipped");
-		gamePanelElement.setAttribute("icon",animals[Math.floor((Math.random() * 16))]);
+        var theAnimal = Math.floor(Math.random()*4);
+		gamePanelElement.setAttribute("icon", animals[theAnimal]);
 		gamePanelElement.classList.add("gamePanel");
 		gamePanelElement.style.width = panelSize;
 		gamePanelElement.style.height = panelSize;
@@ -139,6 +167,9 @@ function buildPanels(gridSize){
 			//uncomment for testing in console
 			//var theType = typeof this;
 			//console.log(theType + ", " + this.getAttribute("id"));
+
+            //rotates each individual div on the Y axis
+            this.style.transform="rotateY(180deg)";
 			
 			var panelID = this.getAttribute('id');
 			var panelState = this.setAttribute('state','flipped');
@@ -146,10 +177,35 @@ function buildPanels(gridSize){
 			var panelIcon = this.getAttribute('icon');
 			var theTime = new Date();
 			var moveTime = theTime.getTime();
-			
-			var theMove = {id:panelID, state:panelState, icon:panelIcon, mvTime:moveTime};
+
+            var theMove = {id:panelID, icon:panelIcon, mvTime:moveTime};
 			gameState.addMove(theMove);
-			console.log(gameState.moves);
+
+            if(moveState === 0){
+                var lastObjNum = gameState.moves.length - 1;
+                var lastObj = gameState.moves[lastObjNum];
+
+                lastObj.mvState = "moveIncomplete";
+
+                moveState = 1;
+            } else{
+                var lastObjNum = gameState.moves.length - 1;
+                var prevObjNum = gameState.moves.length - 2;
+
+                var lastObj = gameState.moves[lastObjNum];
+                var prevObj = gameState.moves[prevObjNum];
+
+                var lastObjIcon = lastObj.icon;
+                var prevObjIcon = prevObj.icon;
+
+                if(lastObjIcon === prevObjIcon){
+                    lastObj.mvState = "moveMatch";
+                }else{
+                    lastObj.mvState = "moveNoMatch";
+                    resetPanels(lastObj.id,prevObj.id);
+                }
+                moveState = 0;
+            }
 		});
 		
 		theBoard.appendChild(gamePanelElement);
@@ -163,6 +219,7 @@ function loadGrid(){
 	gameBoard.setAttribute("id","gameBoard");
 	container = document.getElementById("container");
 	container.appendChild(gameBoard);
+    //specify a dimension for the grid
 	buildPanels(4);
 }
 
