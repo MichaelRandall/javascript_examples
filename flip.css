@@ -1,7 +1,7 @@
 #gameBoard{
 	position:relative;
-	width:100px;
-	min-height:100px;
+	width:200px;
+	min-height:200px;
 	border:solid 2px #3399FF;
 	box-sizing:content-box;
 	transition:transform 2s;
@@ -21,22 +21,7 @@
   	transform-style: preserve-3d;
   	transition: all 1.0s linear;
 }
-/*
-.gamePanel{
-	position:relative;
-	width:10px;
-	height:10px;
-	border:solid 1px green;
-	display:inline-block;
-	box-sizing:content-box;
-    transition:transform 2s;
-	z-index:1;
-}
 
-.gamePanel{
-	perspective:1000;
-}
-*/
 .panel{
 	width:100%;
 	height:100%;
@@ -47,7 +32,7 @@
 
 .face {
   position: absolute;
-  background-image:url(Mahjong_Pieces/Mahjong_Cover.png);
+  /*background-image:url(Mahjong_Pieces/Mahjong_Cover.png);*/
   background-repeat:no-repeat;
   background-size:100% 100%;
   width: 100%;
@@ -57,7 +42,7 @@
 
 .face.back{
 	display:block;
-	background-image:URL(Mahjong_Pieces/T1.png);
+	/*background-image:URL(Mahjong_Pieces/T1.png);*/
 	background-size:100% 100%;
 	background-repeat:no-repeat;
 	transform:rotateY(180deg);
