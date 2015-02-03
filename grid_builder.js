@@ -60,25 +60,32 @@ function resetPanels(_1stp,_2ndp){
     }
 }
 
+//generate numbers takes an integer representing the number of images needed for half the game board
+//loops through and adds those numbers twice to the array, numSet
+var numSet = [];
+function generateNumbers(theCount) {
+
+    var j = 0;
+    while (j < 2) {
+        for (var i = 1; i <= theCount; i++) {
+         numSet.push(i);
+        }
+        j += 1;
+    }
+}
+
 //can remove later, this is for testing
-var animals = [
-"elephant",
-"cat",
-"dog",
-"monkey",
-"horse",
-"rabbit",
-"raccoon",
-"goat"];
+//var animals = [1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8];
+
 
 
 //builds the game panels, called from loadGrid function
 function buildPanels(gridSize){
 	theBoard = document.getElementById("gameBoard");
 	var newGridSize = gridSize * gridSize;
-	var panelSize = ((100 / gridSize) - 2) + "px";
-	
-	
+	var panelSize = ((200 / gridSize) - 2) + "px";
+    var imgsNeeded = newGridSize / 2;
+    generateNumbers(imgsNeeded);
 	
 	for (var i = 0; i < newGridSize; i++){
 		
@@ -96,8 +103,13 @@ function buildPanels(gridSize){
 		
 		cardFront = document.createElement("div");
 		cardFront.setAttribute("class","card front face");
+        cardFront.style.backgroundImage = "url('Mahjong_Pieces/Mahjong_Cover.png')";
+
+
 		cardBack = document.createElement("div");
 		cardBack.setAttribute("class", "card back face");
+        var cardType = numSet.pop();
+        cardBack.style.backgroundImage = "url('Mahjong_Pieces/T" + cardType + ".png')";
 		
 		indPanel.appendChild(cardFront);
 		indPanel.appendChild(cardBack);
