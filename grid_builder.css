@@ -4,18 +4,28 @@
 
 #container {
 	min-width:300px;
-	max-width:350px;
+	max-width:500px;
 	min-height:100px;
     background-color:#C30;
 	border:solid 4px black;
 }
 
+
+#stats{
+    min-width:300px;
+    max-width:500px;
+    min-height:100px;
+    border:solid 4px #000000;
+}
+
+
 #console{
-	min-width:400px;
+	min-width:300px;
+    max-width:500px;
 	min-height:30px;
-	display:inline-block;
-	border:solid 2px black;
-	padding:2px;
+	/*display:inline-block;*/
+	border:solid 4px black;
+	/*padding:2px;*/
 	box-sizing:content-box;
 }
 
