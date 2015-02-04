@@ -1,4 +1,16 @@
+//global game area variables
+var gameStats = [];
+var gameTime = 0;
+var moveCount = 0;
+var wrongMoveCount = 0;
 var moveState = 0;
+
+//individual move area variables
+var moveTime = 0;
+var move = 1;
+var mvData = [];
+var mvStart = "";
+var mvEnd = "";
 
 var gameState = {
 	moves : [],
@@ -27,26 +39,14 @@ var gameState = {
 }
 
 
-
-//global game area variables
-var gameStats = [];
-var gameTime = 0;
-var moveCount = 0;
-
-
-//individual move area variables
-var moveTime = 0;
-var move = 1;
-var mvData = [];
-var mvStart = "";
-var mvEnd = "";
-
 var container = document.getElementById("container");
 
 //records the game clock for game duration, will need to modify to show seconds, minutes, hours, etc...
 function gmClock(){
 	gameTime += 1;
-	console.log(gameTime);
+    var timeKeeper = document.getElementById("totTime");
+	//console.log(gameTime);
+    timeKeeper.innerHTML = gameTime;
 }
 
 function resetPanels(_1stp,_2ndp){
@@ -74,18 +74,14 @@ function generateNumbers(theCount) {
     }
 }
 
-//can remove later, this is for testing
-//var animals = [1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8];
-
-
 
 //builds the game panels, called from loadGrid function
 function buildPanels(gridSize){
 	theBoard = document.getElementById("gameBoard");
 	var newGridSize = gridSize * gridSize;
 	var panelSize = ((200 / gridSize) - 2) + "px";
-    var imgsNeeded = newGridSize / 2;
-    generateNumbers(imgsNeeded);
+    var imagesNeeded = newGridSize / 2;
+    generateNumbers(imagesNeeded);
 	
 	for (var i = 0; i < newGridSize; i++){
 		
@@ -97,10 +93,12 @@ function buildPanels(gridSize){
 		gamePanelElement.classList.add("gamePanel");
 		gamePanelElement.style.width = panelSize;
 		gamePanelElement.style.height = panelSize;
-		
+
+
 		indPanel = document.createElement("div");
 		indPanel.setAttribute("class","panel");
-		
+
+
 		cardFront = document.createElement("div");
 		cardFront.setAttribute("class","card front face");
         cardFront.style.backgroundImage = "url('Mahjong_Pieces/Mahjong_Cover.png')";
@@ -108,17 +106,16 @@ function buildPanels(gridSize){
 
 		cardBack = document.createElement("div");
 		cardBack.setAttribute("class", "card back face");
-        var cardType = numSet.pop();
-        cardBack.style.backgroundImage = "url('Mahjong_Pieces/T" + cardType + ".png')";
+        var cardTypeNum = numSet.pop();
+        var cardType = "T" + cardTypeNum + ".png";
+        cardBack.style.backgroundImage = "url('Mahjong_Pieces/" + cardType + "')";
+        gamePanelElement.setAttribute("icon", cardType);
 		
 		indPanel.appendChild(cardFront);
 		indPanel.appendChild(cardBack);
 		gamePanelElement.appendChild(indPanel);
 		
 		gamePanelElement.addEventListener("click",function(e){
-			//uncomment for testing in console
-			//var theType = typeof this;
-			//console.log(theType + ", " + this.getAttribute("id"));
 
             //rotates each individual div on the Y axis
             this.style.transform="rotateY(180deg)";
@@ -131,7 +128,9 @@ function buildPanels(gridSize){
 			var moveTime = theTime.getTime();
 
             var theMove = {id:panelID, icon:panelIcon, mvTime:moveTime};
+            console.log(theMove);
 			gameState.addMove(theMove);
+
 
             if(moveState === 0){
                 var lastObjNum = gameState.moves.length - 1;
@@ -150,11 +149,24 @@ function buildPanels(gridSize){
                 var lastObjIcon = lastObj.icon;
                 var prevObjIcon = prevObj.icon;
 
+                console.log(lastObjIcon + ", " + prevObjIcon);
+
                 if(lastObjIcon === prevObjIcon){
                     lastObj.mvState = "moveMatch";
+                    moveCount += 1;
+                    var mvCt = document.getElementById("mvCount");
+                    mvCt.innerHTML = moveCount;
+                    console.log("correct guess");
                 }else{
                     lastObj.mvState = "moveNoMatch";
                     resetPanels(lastObj.id,prevObj.id);
+                    moveCount += 1;
+                    wrongMoveCount += 1;
+                    var mvCt = document.getElementById("mvCount");
+                    mvCt.innerHTML = moveCount;
+                    var wgMvCt = document.getElementById("incorrectCount");
+                    wgMvCt.innerHTML = wrongMoveCount;
+                    console.log("incorrect guess");
                 }
                 moveState = 0;
             }
@@ -181,7 +193,7 @@ function init(){
 	strtBttn.addEventListener('click', function(){
 		loadGrid();
 		//Commented out for testing. Uncomment for full game
-		//ntime = setInterval(gmClock, 1000);
+		ntime = setInterval(gmClock, 1000);
 	});
 	var pauseBttn = document.getElementById("pauseBttn");
 	pauseBttn.addEventListener("click", function(){
