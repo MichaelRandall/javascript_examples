@@ -34,7 +34,7 @@ var gameState = {
 	}
 }
 
-
+/*
 var container = document.getElementById("container");
 
 
@@ -50,10 +50,13 @@ function loadGrid(){
 }
 
 
+*/
+
 function init(){
 	var strtBttn = document.getElementById("startBttn");
 	strtBttn.addEventListener('click', function(){
-		loadGrid();
+		//loadGrid();
+        buildGameBoard(4);
 		//Commented out for testing. Uncomment for full game
 		ntime = setInterval(gmClock, 1000);
 	});
