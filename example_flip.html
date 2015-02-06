@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Example Flip</title>
+<link rel="stylesheet" type="text/css" href="example_flip.css">
+
+<script>
+function resetPiece(myPiece){
+	console.log("reset called");
+	myPiece.style.transform = "rotateY(0deg)";
+}
+
+function rotatePic(panelPiece){
+	panelPiece.style.transform = "rotateY(180deg)";
+	setTimeout(function(){resetPiece(panelPiece);},5000);
+	
+}
+
+function init(){
+	var thePanel = document.getElementById('panel');
+	thePanel.addEventListener('click',function(){
+		rotatePic(thePanel);	
+	});
+}
+
+window.addEventListener('load',function(){
+	init();
+});
+</script>
+</head>
+
+<body>
+<div id="gameHolder">
+    <div id="gamePanel">
+        <div id="panel" class="shadow">
+          <div class="front face">
+          </div>
+          <div class="back face center">
+          </div>
+    	</div>
+     </div>
+</div>
+</body>
+</html>
