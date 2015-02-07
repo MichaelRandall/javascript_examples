@@ -1,15 +1,18 @@
-//global game area variables
-var gameTime = 0;
-var moveCount = 0;
-var wrongMoveCount = 0;
-var moveState = 0;
-
-//individual move area variables
-var move = 1;
+var NOT_STARTED = 0;
+var IN_PROGRESS = 1;
+var COMPLETE = 2;
 
 
 var gameState = {
-	moves : [],
+
+    move:1,
+    gameTime:0,
+    moveCount:0,
+    wrongMoveCount:0,
+    moveState:0,
+    movesToWin:0,
+
+    moves : [],
 	
 	addMove: function(move){
 		this.moves.push(move);
@@ -34,23 +37,6 @@ var gameState = {
 	}
 }
 
-/*
-var container = document.getElementById("container");
-
-
-//builds the game board when user clicks start
-function loadGrid(){
-	console.log("loadGrid function called");
-	var gameBoard = document.createElement("div");
-	gameBoard.setAttribute("id","gameBoard");
-	container = document.getElementById("container");
-	container.appendChild(gameBoard);
-    //specify a dimension for the grid
-	buildPanels(4);
-}
-
-
-*/
 
 function init(){
 	var strtBttn = document.getElementById("startBttn");
