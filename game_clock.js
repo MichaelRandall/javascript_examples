@@ -3,8 +3,8 @@
  */
 //records the game clock for game duration, will need to modify to show seconds, minutes, hours, etc...
 function gmClock(){
-	gameTime += 1;
+	gameState.gameTime += 1;
     var timeKeeper = document.getElementById("totTime");
 	//console.log(gameTime);
-    timeKeeper.innerHTML = gameTime;
+    timeKeeper.innerHTML = gameState.gameTime;
 }
