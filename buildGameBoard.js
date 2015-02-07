@@ -102,7 +102,16 @@ function buildPanels(gridSize) {
                     console.log(gameState.moveCount);
                     var mvCt = document.getElementById("mvCount");
                     mvCt.innerHTML = gameState.moveCount;
-                    console.log("correct guess");
+                    gameState.correctMoveCount += 1;
+                    var gmover = isGameOver();
+                    console.log(gmover);
+                    if(isGameOver()){
+                        console.log("You win");
+                        clearInterval(ntime);
+                    }else{
+                        console.log("correct guess");
+                    }
+
                 } else {
                     lastObj.mvState = "moveNoMatch";
                     console.log("Calling reset panels function. lastObj is a: " + typeof lastObj);
