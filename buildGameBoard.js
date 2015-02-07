@@ -24,6 +24,7 @@ function buildPanels(gridSize) {
     var newGridSize = gridSize * gridSize;
     var panelSize = ((200 / gridSize) - 2) + "px";
     var imagesNeeded = newGridSize / 2;
+    gameState.movesToWin = newGridSize / 2;
     generateNumbers(imagesNeeded);
 
     for (var i = 0; i < newGridSize; i++) {
@@ -75,13 +76,13 @@ function buildPanels(gridSize) {
             gameState.addMove(theMove);
 
 
-            if (moveState === 0) {
+            if (gameState.moveState === 0) {
                 var lastObjNum = gameState.moves.length - 1;
                 var lastObj = gameState.moves[lastObjNum];
 
                 lastObj.mvState = "moveIncomplete";
 
-                moveState = 1;
+                gameState.moveState = 1;
             } else {
                 var lastObjNum = gameState.moves.length - 1;
                 var prevObjNum = gameState.moves.length - 2;
@@ -97,9 +98,10 @@ function buildPanels(gridSize) {
                 if (lastObjIcon === prevObjIcon) {
 
                     lastObj.mvState = "moveMatch";
-                    moveCount += 1;
+                    gameState.moveCount += 1;
+                    console.log(gameState.moveCount);
                     var mvCt = document.getElementById("mvCount");
-                    mvCt.innerHTML = moveCount;
+                    mvCt.innerHTML = gameState.moveCount;
                     console.log("correct guess");
                 } else {
                     lastObj.mvState = "moveNoMatch";
@@ -107,15 +109,16 @@ function buildPanels(gridSize) {
                     setTimeout(function () {
                         resetPanels(lastObj.id, prevObj.id);
                     }, 2000);
-                    moveCount += 1;
-                    wrongMoveCount += 1;
+                    gameState.moveCount += 1;
+                    gameState.wrongMoveCount += 1;
+                    console.log(gameState.moveCount + ", " + gameState.wrongMoveCount);
                     var mvCt = document.getElementById("mvCount");
-                    mvCt.innerHTML = moveCount;
+                    mvCt.innerHTML = gameState.moveCount;
                     var wgMvCt = document.getElementById("incorrectCount");
-                    wgMvCt.innerHTML = wrongMoveCount;
+                    wgMvCt.innerHTML = gameState.wrongMoveCount;
                     console.log("incorrect guess");
                 }
-                moveState = 0;
+                gameState.moveState = 0;
             }
         });
         //indGamePanel.appendChild(gamePanelElement);
@@ -125,6 +128,7 @@ function buildPanels(gridSize) {
 
 
 function buildGameBoard(tile_count) {
+    $( "#container" ).empty();
     console.log("buildGameBoard function called");
     var gameBoard = document.createElement("div");
     gameBoard.setAttribute("id", "gameBoard");
