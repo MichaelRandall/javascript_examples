@@ -6,9 +6,11 @@ var COMPLETE = 2;
 var gameState = {
 
     move:1,
+    gameStateState: NOT_STARTED,
     gameTime:0,
     moveCount:0,
     wrongMoveCount:0,
+    correctMoveCount:0,
     moveState:0,
     movesToWin:0,
 
@@ -41,10 +43,17 @@ var gameState = {
 function init(){
 	var strtBttn = document.getElementById("startBttn");
 	strtBttn.addEventListener('click', function(){
-		//loadGrid();
-        buildGameBoard(4);
-		//Commented out for testing. Uncomment for full game
-		ntime = setInterval(gmClock, 1000);
+        if(gameState.gameStateState === NOT_STARTED){
+            gameState.gameStateState = IN_PROGRESS;
+		    //loadGrid();
+            buildGameBoard(4);
+            gameState.movesToWin = 8;
+		    //Commented out for testing. Uncomment for full game
+		    ntime = setInterval(gmClock, 1000);
+        } else {
+
+        }
+
 	});
 	var pauseBttn = document.getElementById("pauseBttn");
 	pauseBttn.addEventListener("click", function(){
